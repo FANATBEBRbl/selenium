@@ -19,3 +19,4 @@ def test_guest_can_add_product_to_basket(browser, link):
     page.click_on_bucket()
     page.solve_quiz_and_get_code()
     page.check_names_and_price()
+    time.sleep(20)

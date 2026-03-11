@@ -7,4 +7,3 @@ def test_add_to_bucket(browser):
     page.open()
     page.click_on_bucket()
     page.solve_quiz_and_get_code()
-    
