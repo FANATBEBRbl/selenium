@@ -4,26 +4,27 @@ from .pages.locators import ActionPageLocators
 
 link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
 
-@pytest.mark.xfail
-def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
-    page = ActionPage(browser, link)
-    page.open()
-    page.click_on_bucket()
-    page.solve_quiz_and_get_code()
-    assert page.is_not_element_present(*ActionPageLocators.SUCCESS_MESSAGE), \
-       "Показано сообщение об успехе"
+@pytest.mark.negative_checks
+class TestNegativeChecks:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        self.page = ActionPage(browser, link)
+        self.page.open()
 
-def test_guest_cant_see_success_message(browser):
-    page = ActionPage(browser, link)
-    page.open()
-    assert page.is_not_element_present(*ActionPageLocators.SUCCESS_MESSAGE), \
-       "Показано сообщение об успехе"
+    @pytest.mark.xfail(reason="Сообщение об успехе появилось")
+    def test_guest_cant_see_success_message_after_adding_product_to_basket(self, browser):
+        self.page.click_on_bucket()
+        self.page.solve_quiz_and_get_code()
+        assert self.page.is_not_element_present(*ActionPageLocators.SUCCESS_MESSAGE), \
+           "Сообщение об успехе появилось, но не должно было"
 
-@pytest.mark.xfail
-def test_message_disappeared_after_adding_product_to_basket(browser):
-    page = ActionPage(browser, link)
-    page.open()
-    page.click_on_bucket()
-    page.solve_quiz_and_get_code()
-    assert page.is_disappeared(*ActionPageLocators.SUCCESS_MESSAGE), \
-       "Сообщение не исчезло"
+    def test_guest_cant_see_success_message(self, browser):
+        assert self.page.is_not_element_present(*ActionPageLocators.SUCCESS_MESSAGE), \
+           "Сообщение об успехе появилось, но не должно было"
+
+    @pytest.mark.xfail(reason="Сообщение не исчезло")
+    def test_message_disappeared_after_adding_product_to_basket(self, browser):
+        self.page.click_on_bucket()
+        self.page.solve_quiz_and_get_code()
+        assert self.page.is_disappeared(*ActionPageLocators.SUCCESS_MESSAGE), \
+           "Сообщение не исчезло, но должно было"
