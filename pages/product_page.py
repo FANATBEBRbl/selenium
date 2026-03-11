@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import math
 
-class ActionPage(BasePage):
+class ProductPage(BasePage):
     def click_on_bucket(self):
         self.browser.find_element(By.CLASS_NAME, "btn-add-to-basket").click()
         
